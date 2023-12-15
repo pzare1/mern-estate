@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';     
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { errorHandler } from '../utils/error.js';
 
 export const signupController = async(req, res, next) => {
@@ -26,7 +27,10 @@ export const signinController = async (req, res, next) => {
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        res.status(200).json({ message: 'Login successful', user });
+        const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1d' });
+        const { password : pass, ...others } = user._doc;
+        res.cookie('signIn', token, { httpOnly: true });
+        res.status(200).json({ message: 'Login successful', others });
     } catch (error) {
         next(error);
     }
