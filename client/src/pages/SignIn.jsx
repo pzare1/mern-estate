@@ -10,30 +10,38 @@ function SignIn() {
         setformData({...formData, [e.target.id]: e.target.value});
     }
     const submitHandle = async (e) => {
-        e.preventDefault();
-        try {
-            setloading(true);   
-            const res = await fetch('/api/auth/signin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            const data = await res.json();
-            if(data.success === false){
-                setErrors(data.message);
-                setloading(false);
-                return;
-            }
-            setloading(false);
-            setErrors(null); 
-            navigate('/')
-        } catch (error) {
-            setloading(false);
-            setErrors(error.message);   
-        }
-    };      
+      e.preventDefault();
+      try {
+          setloading(true);   
+          const res = await fetch('/api/auth/signin', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+          });
+          
+          if (!res.ok) {
+              // Handle specific error cases
+              if (res.status === 401) {
+                  setErrors('Invalid username or password');
+              } else {
+                  setErrors('An error occurred while logging in. Please try again.');
+              }
+              setloading(false);
+              return;
+          }
+  
+          const data = await res.json();
+          setloading(false);
+          setErrors(null); 
+          navigate('/');
+      } catch (error) {
+          setloading(false);
+          setErrors('An unexpected error occurred. Please try again.');
+      }
+  };
+      
     const changePage =  (e) => {
         e.preventDefault();
         navigate('/register')
