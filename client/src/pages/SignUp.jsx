@@ -13,7 +13,7 @@ function SignUp() {
         e.preventDefault();
         try {
             setloading(true);   
-            const res = await fetch('/api/auth/', {
+            const res = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,11 +33,7 @@ function SignUp() {
             setloading(false);
             setErrors(error.message);   
         }
-    };
-    const changePage = (e) => {
-        e.preventDefault();
-        navigate('/login'); 
-    }
+    };      
   return (
     <div>
         <h1 className='my-5 sm:my-7 text-center font-semibold sm:text-xl text-sm text-slate-400 bg-slate-200 w-full max-w-md mx-auto py-3 rounded-md'>
@@ -53,8 +49,8 @@ function SignUp() {
                     <label className='block text-slate-600 text-sm font-bold mb-2' htmlFor='password'></label>
                     <input className=' my-2 placeholder:text-sm shadow appearance-none border rounded w-full py-2 px-3 text-slate-600 leading-tight focus:outline-none focus:shadow-outline' id='password' type='password' placeholder='Password' onChange={changeHandle}/>
                     <button disabled={loading} className='my-2 w-full bg-slate-600 hover:bg-slate-500 text-slate-200 text-sm py-2 px-4 rounded focus:outline-none focus:shadow-outline'>{loading ? 'Loading' : 'Register'}</button>
+                    <button className='my-2 w-full bg-green-600 hover:bg-green-500 text-green-50 text-sm py-2 px-4 rounded focus:outline-none focus:shadow-outline'>Login</button>
                 </div>
-                <button onClick={changePage} className='my-2 w-full bg-green-600 hover:bg-green-500 text-green-50 text-sm py-2 px-4 rounded focus:outline-none focus:shadow-outline'>Login</button>
                 {errors && <div className='text-red-600 text-sm p-2 bg-red-100 rounded-md my-2'>{errors}</div>}
             </div>
         </form>
